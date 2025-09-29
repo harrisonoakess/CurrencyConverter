@@ -1,16 +1,10 @@
-﻿using System;
-using System.ComponentModel.Design;
-using System.Runtime.CompilerServices;
-using Microsoft.Data.Sqlite;
-using Microsoft.VisualBasic;
-
-namespace CurrencyConverterApp
+﻿namespace CurrencyConverterApp
 {
     class Program
     {
         static void Main(string[] args)
         {
-            // On startup, everything below here runs
+            // --------------start application--------------------
             Console.WriteLine("Welcome to my Currency Converter!");
             var rates = LoadExchangeRates();
 
@@ -24,7 +18,7 @@ namespace CurrencyConverterApp
                 switch (input)
                 {
                     case "1":
-                        ConvertCurrency();
+                        ConvertCurrency(rates);
                         break;
 
                     case "2":
@@ -44,8 +38,9 @@ namespace CurrencyConverterApp
 
             Console.Write("See you next time!");
         }
+        // -----------end application------------
 
-        static void ShowMenu()
+        static void ShowMenu() // lists each available use
         {
             Console.WriteLine("\n=== Menu ===");
             Console.WriteLine("1. Convert currency");
@@ -53,7 +48,7 @@ namespace CurrencyConverterApp
             Console.WriteLine("3. Exit");
         }
 
-        static void ListAllCurrencies(Dictionary<string, (string name, decimal rate)> rates)
+        static void ListAllCurrencies(Dictionary<string, (string name, decimal rate)> rates) // lists all currencies in table
         {
             Console.WriteLine("\n=== Currencies ===");
             Console.WriteLine($"{"Code",-6} {"Name",-25} {"Rate/USD",-10}");
@@ -68,16 +63,8 @@ namespace CurrencyConverterApp
             }
         }
 
-        static void ConvertCurrency()
+        static void ConvertCurrency(Dictionary<string, (string name, decimal rate)> rates) // converts currency
         {
-            var rates = new Dictionary<string, decimal>
-                {
-                    { "USD", 1.0m },
-                    { "PHP", 43.1232m },
-                    { "EUR", 0.92m },
-                    { "JPY", 150.5m }
-                };
-
             Console.WriteLine("Enter amount: ");
             string amountInput = Console.ReadLine();
             bool isValidAmount = decimal.TryParse(amountInput, out decimal amount);
@@ -104,16 +91,16 @@ namespace CurrencyConverterApp
                 Console.WriteLine("Please select a valid currency");
                 return;
             }
-
-            decimal rateFrom = rates[fromInput];
-            decimal rateTo = rates[toInput];
+            // ----------- converting math-----------
+            decimal rateFrom = rates[fromInput].rate; // add .rate to make sure the decimal us pulled
+            decimal rateTo = rates[toInput].rate;
 
             decimal amountInUSD = amount / rateFrom;
             decimal converted = amountInUSD * rateTo;
 
             Console.WriteLine($"  Amount: {amount}");
-            Console.WriteLine($"  From:   {fromInput} @ rate {rateFrom}");
-            Console.WriteLine($"  To:     {toInput} @ rate {rateTo}");
+            Console.WriteLine($"  From:   {fromInput} at rate {rateFrom}");
+            Console.WriteLine($"  To:     {toInput} at rate {rateTo}");
             Console.WriteLine($"  Result: {converted:F2} {toInput}");
 
         }
@@ -124,6 +111,7 @@ namespace CurrencyConverterApp
             return active;
         }
 
+        //---------- dictionary of all currencies. Consider using api to update this dict--------------
         static Dictionary<string, (string name, decimal rate)> LoadExchangeRates()
         {
             return new Dictionary<string, (string, decimal)>
