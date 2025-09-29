@@ -53,3 +53,20 @@ Built as a programming exercise to demonstrate clean coding, modular design, and
   ```text
   converted = (amount / rateFrom) * rateTo
 
+## ⚙️ How to Initialize, Build, and Run the Program
+
+Follow these steps to set up and execute the Currency Converter project on your local machine.
+
+### 🛠️ 1. Initialize a New C# Console Project
+If you don’t already have one:
+
+```bash
+dotnet new console -n CurrencyConverter
+cd CurrencyConverter
+```
+
+### ✅ 2. Start the console application
+```bash
+dotnet run
+```
+
